@@ -9,11 +9,12 @@
  ***---------------------------------------------------------------------
  **/
 package org.hova.hover.sdk.http;
+
 /**
-* Creates a correct GET HTTP request using query string as API needs.
-*
-* @author CarlosAlvarezV
-*/
+ * Creates a correct GET HTTP request using query string as API needs.
+ *
+ * @author CarlosAlvarezV
+ */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +37,9 @@ import org.hova.hover.sdk.common.Logs;
 public class ClientGET {
 	// Endpoint
 	String Endpoint = System.getProperty("http.endpoint");
+
+	// API Version
+	String API_Version = System.getProperty("http.api.version");
 
 	// HTTP parameters
 	String timeout = System.getProperty("http.connection.timeout");
@@ -79,11 +83,12 @@ public class ClientGET {
 	public Response request() throws URISyntaxException,
 			ClientProtocolException, IOException {
 
-		URI uri_ = new URI(Endpoint + this.uri + "/?" + this.body);
+		URI uri_ = new URI(Endpoint + "/" + API_Version + this.uri + "/?"
+				+ this.body);
 		HttpClient httpclient = new DefaultHttpClient();
 
 		HttpParams httpparams = httpclient.getParams();
-		
+
 		// Set timeout
 		HttpConnectionParams.setConnectionTimeout(httpparams,
 				Integer.valueOf(timeout));
@@ -129,7 +134,7 @@ public class ClientGET {
 				Logs.LOG_RESPONSE,
 				new String[] { String.valueOf(response.getHttpcode()),
 						response.getBody(), "[Class<?>T]" });
-		
+
 		httpclient.getConnectionManager().shutdown();
 
 		return response;

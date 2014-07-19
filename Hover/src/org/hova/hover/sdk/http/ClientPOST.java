@@ -41,6 +41,9 @@ public class ClientPOST {
 	// Endpoint
 	String Endpoint = System.getProperty("http.endpoint");
 
+	//API Version
+		String API_Version = System.getProperty("http.api.version");
+		
 	// HTTP parameters
 	String timeout = System.getProperty("http.connection.timeout");
 	String readtimeout = System.getProperty("http.connection.readtimeout");
@@ -82,7 +85,8 @@ public class ClientPOST {
 	 */
 	public Response request() throws IllegalStateException, IOException, URISyntaxException {
 
-		URI uri_ = new URI(Endpoint + this.uri);
+		URI uri_ = new URI(Endpoint + "/" + API_Version + this.uri);
+		
 		HttpClient httpclient = new DefaultHttpClient();
 
 		HttpParams httpparams = httpclient.getParams();

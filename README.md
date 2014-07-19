@@ -1,9 +1,9 @@
-rest-api-sdk-java-android
+rest-api-sdk-android
 =========================
 
-Hover API Rest SDK for Java/Android
+Hover API Rest SDK for Android
 
-Welcome to the Hover SDK for Java/Android, this SDK is for building apps for Android-powered devices based on the Hover API. The Hover SDK for Java/Android makes it easy to integrate a full Hover API services into Android apps. 
+Welcome to the Hover SDK for Android, this SDK is for building apps for Android-powered devices based on the Hover API. The Hover SDK for Android makes it easy to integrate a full Hover API services into Android apps. 
 
 
 Requirements

@@ -56,14 +56,16 @@ public class Config {
 		// All configuration to System
 		sys.setProperty("http.endpoint",
 				properties.getProperty("http.endpoint"));
+		sys.setProperty("http.api.version",
+				properties.getProperty("http.api.version"));
 		sys.setProperty("http.connection.timeout",
 				properties.getProperty("http.connection.timeout"));
 		sys.setProperty("http.connection.readtimeout",
 				properties.getProperty("http.connection.readtimeout"));
 
 		// Log [INFO] Prepare http request
-		Logger.getLogger("rest-api-sdk-java").log(Level.INFO, Logs.LOG_CONFIG,
-				new String[] { properties.toString() });
+		Logger.getLogger("rest-api-sdk-android").log(Level.INFO,
+				Logs.LOG_CONFIG, new String[] { properties.toString() });
 
 		this.configurationStatus = true;
 	}

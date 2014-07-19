@@ -9,11 +9,12 @@
  ***---------------------------------------------------------------------
  **/
 package org.hova.hover.sdk.http;
+
 /**
-* Creates a correct DELETE HTTP request with a json encoded as a body.
-*
-* @author CarlosAlvarezV
-*/
+ * Creates a correct DELETE HTTP request with a json encoded as a body.
+ *
+ * @author CarlosAlvarezV
+ */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +36,9 @@ import org.hova.hover.sdk.common.Logs;
 public class ClientDELETE {
 	// Endpoint
 	String Endpoint = System.getProperty("http.endpoint");
+
+	// API Version
+	String API_Version = System.getProperty("http.api.version");
 
 	// HTTP parameters
 	String timeout = System.getProperty("http.connection.timeout");
@@ -78,12 +82,10 @@ public class ClientDELETE {
 	public Response request() throws URISyntaxException, IllegalStateException,
 			IOException {
 
-		URI uri_ = new URI(Endpoint + this.uri);
-		
-		
+		URI uri_ = new URI(Endpoint + "/" +  API_Version + this.uri);
+
 		HttpClient httpclient = new DefaultHttpClient();
 
-		 
 		HttpParams httpparams = httpclient.getParams();
 
 		// Set timeout
@@ -93,10 +95,9 @@ public class ClientDELETE {
 				Integer.valueOf(readtimeout));
 
 		HttpDelete httpdelete = new HttpDelete(uri_);
-		
-		//httpdelete.setEntity(new StringEntity(json_obj, "UTF-8"));
 
-		
+		// httpdelete.setEntity(new StringEntity(json_obj, "UTF-8"));
+
 		httpdelete.setHeader("Accept", ctype);
 		httpdelete.addHeader("Host", uri_.getHost());
 

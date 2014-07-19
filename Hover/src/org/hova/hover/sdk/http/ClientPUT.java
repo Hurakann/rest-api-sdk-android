@@ -31,13 +31,16 @@ import org.apache.http.params.HttpParams;
 import org.hova.hover.sdk.common.Logs;
 
 /**
-* Creates a correct PUT HTTP request with a json encoded as a body.
-*
-* @author CarlosAlvarezV
-*/
+ * Creates a correct PUT HTTP request with a json encoded as a body.
+ * 
+ * @author CarlosAlvarezV
+ */
 public class ClientPUT {
 	// Endpoint
 	String Endpoint = System.getProperty("http.endpoint");
+
+	// API Version
+	String API_Version = System.getProperty("http.api.version");
 
 	// HTTP parameters
 	String timeout = System.getProperty("http.connection.timeout");
@@ -74,13 +77,15 @@ public class ClientPUT {
 	 * passed into this class constructor.
 	 * 
 	 * @return the response instance containing code and body response
-	 * @throws IOException 
-	 * @throws IllegalStateException 
-	 * @throws URISyntaxException 
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws URISyntaxException
 	 */
-	public Response request() throws IllegalStateException, IOException, URISyntaxException {
+	public Response request() throws IllegalStateException, IOException,
+			URISyntaxException {
 
-		URI uri_ = new URI(Endpoint + this.uri);
+		URI uri_ = new URI(Endpoint + "/" + API_Version + this.uri);
+
 		HttpClient httpclient = new DefaultHttpClient();
 
 		HttpParams httpparams = httpclient.getParams();

@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 import org.apache.http.client.ClientProtocolException;
 import org.hova.hover.sdk.http.ClientGET;
 import org.hova.hover.sdk.http.ClientPOST;
+import org.hova.hover.sdk.http.ClientPUT;
 import org.hova.hover.sdk.http.Response;
 import org.hova.hover.sdk.pojo.User;
 
@@ -29,12 +30,13 @@ import com.google.gson.Gson;
  */
 public class UserResource {
 	// the resource of our versioning api
-	private static String URI = "/v1/user";
+	private static String URI = "/user";
 
 	// Our data encode as json (in next releases maybe include xml format)
 	private static String CTYPE = "application/json";
 
 	/**
+	 * 
 	 * Create a user in the Hover system using Hover API, the next attributes in
 	 * the User class must be required, not null:
 	 * 
@@ -45,13 +47,13 @@ public class UserResource {
 	 *            be encoded as json format by the SDK
 	 * @return a response instance with the http status code and the body
 	 *         decoded as json and in a class translation
+	 * 
 	 * @throws URISyntaxException
 	 * @throws IllegalStateException
-	 * @throws ClassNotFoundException
-	 * @throws MalformedURLException
 	 * @throws IOException
+	 * 
 	 */
-	public Response create(User user) throws IllegalStateException,
+	public Response createUser(User user) throws IllegalStateException,
 			IOException, URISyntaxException {
 
 		// Translates class to json :)
@@ -82,16 +84,18 @@ public class UserResource {
 	 *            required, not null.
 	 * @return a response instance with the http status code and the body
 	 *         decoded as json and in a class translation
+	 * 
 	 * @throws URISyntaxException
 	 * @throws ClientProtocolException
 	 * @throws MalformedURLException
 	 * @throws IOException
+	 * 
 	 */
-	public Response get(String branchid, String userid, String phase)
+	public Response fetchUser(String branch_id, String user_id, String phase)
 			throws ClientProtocolException, URISyntaxException, IOException {
 
 		// Build a query string data for [GET]
-		String queryString = "branch_id=" + branchid + "&user_id=" + userid
+		String queryString = "branch_id=" + branch_id + "&user_id=" + user_id
 				+ "&phase=" + phase;
 
 		// Creates a new http client
@@ -100,13 +104,42 @@ public class UserResource {
 		// Send request
 		Response response = client.request();
 
-		// Translates map to class
-		Gson gson = new Gson();
-		User user = gson.fromJson(response.getBody(), User.class);
-
-		response.setBodyT(user);
-
 		return response;
 
+	}
+
+	/**
+	 * 
+	 * Update a user in the Hover system using Hover API, the next attributes in
+	 * the User class must be required, not null:
+	 * 
+	 * - branch_id - user_id
+	 * 
+	 * @param user
+	 *            the user class representing the data to post. The data could
+	 *            be encoded as json format by the SDK
+	 * 
+	 * @return a response instance with the http status code and the body
+	 *         decoded as json and in a class translation
+	 * 
+	 * @throws URISyntaxException
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 * 
+	 */
+	public Response updateUser(User user) throws IllegalStateException,
+			IOException, URISyntaxException {
+
+		// Translates class to json :)
+		Gson gson = new Gson();
+		String body = gson.toJson(user);
+
+		// Creates a new http client
+		ClientPUT client = new ClientPUT(body, URI, CTYPE);
+
+		// Send request
+		Response response = client.request();
+
+		return response;
 	}
 }

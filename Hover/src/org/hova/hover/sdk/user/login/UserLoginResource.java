@@ -27,7 +27,7 @@ import org.hova.hover.sdk.http.Response;
  */
 public class UserLoginResource {
 	// the resource of our versioning api
-	private static String URI = "/v1/user/login";
+	private static String URI = "/user/login";
 
 	// Our data encode as json (in next releases maybe include xml format)
 	private static String CTYPE = "application/json";
@@ -60,12 +60,6 @@ public class UserLoginResource {
 
 		// Send request
 		Response response = client.request();
-
-		// Translates map to class
-		// Gson gson = new Gson();
-		// UserLogin user = gson.fromJson(response.getBody(), UserLogin.class);
-
-		// response.setBodyT(user);
 
 		return response;
 
