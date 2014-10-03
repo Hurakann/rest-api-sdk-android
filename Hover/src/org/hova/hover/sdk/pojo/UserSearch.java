@@ -17,116 +17,36 @@ package org.hova.hover.sdk.pojo;
  * @author CarlosAlvarezV
  */
 public class UserSearch {
-	private String phase;
-	private String name;
-	private String lastname;
-	private String lastname2;
-	private String merge;
-	private String profile_id;
-	private String broot;
-
-	/**
-	 * @return the phase
-	 */
-	public String getPhase() {
-		return phase;
+	
+	private String branch_id;
+	private int pagination;
+	private int page;
+	
+	
+	public String getBranch_id() {
+		return branch_id;
+	}
+	public void setBranch_id(String branch_id) {
+		this.branch_id = branch_id;
+	}
+	
+	
+	
+	public int getPagination() {
+		return pagination;
+	}
+	public void setPagination(int pagination) {
+		this.pagination = pagination;
+	}
+	
+	
+	
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 
-	/**
-	 * @param phase
-	 *            the phase to set
-	 */
-	public void setPhase(String phase) {
-		this.phase = phase;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the lastname
-	 */
-	public String getLastname() {
-		return lastname;
-	}
-
-	/**
-	 * @param lastname
-	 *            the lastname to set
-	 */
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	/**
-	 * @return the lastname2
-	 */
-	public String getLastname2() {
-		return lastname2;
-	}
-
-	/**
-	 * @param lastname2
-	 *            the lastname2 to set
-	 */
-	public void setLastname2(String lastname2) {
-		this.lastname2 = lastname2;
-	}
-
-	/**
-	 * @return the merge
-	 */
-	public String getMerge() {
-		return merge;
-	}
-
-	/**
-	 * @param merge
-	 *            the merge to set
-	 */
-	public void setMerge(String merge) {
-		this.merge = merge;
-	}
-
-	/**
-	 * @return the profile_id
-	 */
-	public String getProfile_id() {
-		return profile_id;
-	}
-
-	/**
-	 * @param profile_id
-	 *            the profile_id to set
-	 */
-	public void setProfile_id(String profile_id) {
-		this.profile_id = profile_id;
-	}
-
-	/**
-	 * @return the broot
-	 */
-	public String getBroot() {
-		return broot;
-	}
-
-	/**
-	 * @param broot
-	 *            the broot to set
-	 */
-	public void setBroot(String broot) {
-		this.broot = broot;
-	}
+	
 }

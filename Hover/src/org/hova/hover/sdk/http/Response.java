@@ -10,6 +10,8 @@
  **/
 package org.hova.hover.sdk.http;
 
+import com.google.gson.Gson;
+
 /**
  * HTTP Code and Body as the API responses on the requested resource.
  * 
@@ -75,7 +77,9 @@ public class Response {
 	 * @return the bodyT casted to 'clazz'
 	 */
 	public Object getBodyT(Class<?> clazz) {
-		return clazz.cast(bodyT);
+		Gson gson = new Gson();
+        bodyT = gson.fromJson(this.getBody(), clazz);       
+        return clazz.cast(bodyT);
 	}
 
 	/**

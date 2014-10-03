@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.http.client.ClientProtocolException;
-import org.hova.hover.sdk.http.ClientGET;
+import org.hova.hover.sdk.http.ClientGETAsync;
+import org.hova.hover.sdk.http.ClientGETAsync.getRequestExectue;
 import org.hova.hover.sdk.http.Response;
 
 /**
@@ -23,42 +24,35 @@ import org.hova.hover.sdk.http.Response;
  * 
  * @author CarlosAlvarezV
  */
-public class UserAvailabilityResource {
-	/**
-	 * The resource of our versioning api.
-	 */
-	private static String URI = "/user/availability";
+public class UserAvailabilityResource implements getRequestExectue{
 
-	/**
-	 * Our data encode as json (in next releases maybe include xml format).
-	 */
-	private static String CTYPE = "application/json";
 
-	/**
-	 * Check if username as email, nfc or other data used for login are
-	 * available to use.
-	 * 
-	 * @param identity
-	 *            the string representing the data to found
-	 * 
-	 * @return a response instance with the http status code
-	 * 
-	 * @throws URISyntaxException
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
-	public Response checkAvailability(String identity) throws ClientProtocolException, URISyntaxException, IOException{
+	protected static String URI="/user/availability";
+	protected static String CTYPE="application/json;";
 
-		// Build a query string data for [GET]
-		String queryString = "identity=" + identity;
-
-		// Creates a new http client
-		ClientGET client = new ClientGET(queryString, URI, CTYPE);
-
-		// Send request
-		Response response = client.request();
-
-		return response;
-
+	ResourceAvailability availability_resource;
+	
+	public interface ResourceAvailability{
+		void onCheckAvailanility(Response result);
 	}
+	
+	public UserAvailabilityResource(ResourceAvailability ar) {
+		// TODO Auto-generated constructor stub
+		availability_resource=ar;
+	}
+	
+	public void checkAvailability(String identity) throws ClientProtocolException, URISyntaxException, IOException{
+		// Build a query string data for [GET]
+		String query="?identity="+identity;
+		
+		ClientGETAsync req=new ClientGETAsync(this);
+		req.execute(URI,query,CTYPE);
+	}
+	
+	
+	@Override
+	public void doGetExecute(Response result) {
+		availability_resource.onCheckAvailanility(result);
+	}
+		
 }
