@@ -1,4 +1,4 @@
-package org.hova.hover.sdk.confirm;
+package org.hova.hover.sdk.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,23 +9,23 @@ import java.io.UnsupportedEncodingException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.hova.hover.sdk.http.Response;
-import org.hova.hover.sdk.pojo.ConfirmRegister;
-
-import com.google.gson.Gson;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class ConfirmRegisterResource extends AsyncTask<String, String, Response> {
+public class ClientPUTAsync extends AsyncTask<String, String, Response> {
 
-	private static String CTYPE= "application/json;";
-	
+	// Endpoint
+	String endpoint = System.getProperty("http.endpoint");
+
+	// API Version
+	String api_version = System.getProperty("http.api.version");
+
 	// HTTP parameters
 	String timeout = System.getProperty("http.connection.timeout");
 	String readtimeout = System.getProperty("http.connection.readtimeout");
@@ -35,54 +35,66 @@ public class ConfirmRegisterResource extends AsyncTask<String, String, Response>
 		
 	// Response object
 	Response resp;
-
-	// Function to callBack
-	ResourceConfirmRegister resource_confirm_register;
 		
+	// Function to callBack
+	PutRequestExectue put_req_execute;
+	
+	 /**
+	  * 
+	  * Interface to implements callback methods
+	  * 
+    */
+	public interface PutRequestExectue {
+		void doPutExecute(Response result);
+	}
+	
+	
 	/**
-	 *
-	 * Interface to implements callback methods
-	 * 
-	*/
-	public interface ResourceConfirmRegister {
-		void doSendConfirm(Response result);
+     * Build a instance of this class and set the default values to execute
+     * request
+     *
+     * @param pr is an interface instance to implements callback methods
+     * 
+     */
+	public ClientPUTAsync(PutRequestExectue putreq){
+		put_req_execute=putreq;
 	}
 	
-	
-	public ConfirmRegisterResource(ResourceConfirmRegister resource_confirm_register) {
-		this.resource_confirm_register = resource_confirm_register;
-	}
-
+	/**
+     * Execute the PUT HTTP request
+     *
+     * @param Array String contains all poarameters to execute request
+     *
+     * @return the response instance containing code and body response
+     * @throws UnsupportedEncodingException
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
 	@Override
 	protected Response doInBackground(String... params) {
-		
 		try {
-			//params [0] URI
-			//params [1] Body
-			//params [2] CTYPE
-			//params [3] SERVER
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(params[3]+params[0].toString());
-			
-			Log.d("SDK", "HOST "+httpPost.getURI());
-			
+			HttpPut httpPut = new HttpPut(endpoint+"/"+api_version+params[0].toString());
+		
+			Log.d("SDK", "HOST "+httpPut.getURI());
+		
 			StringEntity entity;
+		
 			entity = new StringEntity(params[1], "UTF-8");
 			entity.setContentEncoding("UTF-8");
-			
-			Log.d("SDK", "BODY "+params[1]);
 			
 			HttpParams httpParameters = httpClient.getParams();
 			HttpConnectionParams.setConnectionTimeout(httpParameters, Integer.parseInt(timeout));
 			HttpConnectionParams.setSoTimeout(httpParameters, Integer.parseInt(readtimeout));
 			
-			httpPost.setEntity(entity);
-			httpPost.setHeader("Accept", params[2]);
-			httpPost.setHeader("Content-type",params[2]+"charset=UTF-8");
-			httpPost.addHeader("Ckey",Ckey);
+			httpPut.setEntity(entity);
+			httpPut.setHeader("Accept", params[2]);
+			httpPut.setHeader("Content-type",params[2]+"charset=UTF-8");
+			httpPut.addHeader("Ckey",Ckey);
 			
-			HttpResponse httpResponse = httpClient.execute(httpPost);
+			
+			HttpResponse httpResponse = httpClient.execute(httpPut);
 			
 			resp=new Response();
 			resp.setHttpcode(httpResponse.getStatusLine().getStatusCode());
@@ -102,6 +114,7 @@ public class ConfirmRegisterResource extends AsyncTask<String, String, Response>
 			
 			resp.setBody(json);
 			
+			
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -109,24 +122,25 @@ public class ConfirmRegisterResource extends AsyncTask<String, String, Response>
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block	
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return resp;
+		
+		
+		return null;
 	}
 
 	
-	public void sendConfirmRegister(ConfirmRegister cr, String server, String uri){
-		Gson gson=new Gson();
-		String json=gson.toJson(cr);
-		this.execute(uri,json,CTYPE,server);
-	}
-	
-	
+	/**
+     * Callback method to indicate end of API request (Async. task).
+     *
+     * @param result the response instance containing code and body response
+     * 
+     */
 	@Override
     public void onPostExecute(Response result) {
-		resource_confirm_register.doSendConfirm(result);
+		put_req_execute.doPutExecute(result);
     }
+	
 	
 }
