@@ -10,6 +10,8 @@
  **/
 package org.hova.hover.sdk.common;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +29,9 @@ public class Utility {
 	 * @param map
 	 *            the map containing reflection values
 	 * @return the query string well-formed
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String buildQueryString(Map<String, String> map) {
+	public String buildQueryString(Map<String, String> map) throws UnsupportedEncodingException {
 
 		// query string
 		String queryString = "";
@@ -42,7 +45,7 @@ public class Utility {
 				// Get value of the map (value of parameter)
 				String value = (String) mapEntry.getValue();
 
-				queryString = queryString + name + "=" + value + "&";
+				queryString = queryString + name + "=" + URLEncoder.encode(value, "UTF-8") + "&";
 			}
 		}
 

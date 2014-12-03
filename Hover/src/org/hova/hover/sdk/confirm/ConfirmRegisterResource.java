@@ -1,21 +1,11 @@
-/**----------------------------------------------------------------------
-*** Copyright: (c) 2013-2014 Hova Networks S.A.P.I. de C.V.
-*** All rights reserved.
-***
-*** Redistribution and use in any form, with or without modification,
-*** is strictly prohibited.
-***
-*** Created by : Eder Gomez Nocelo <eder.nocelo@hovanetworks.com>
-***---------------------------------------------------------------------
-**/
-
-package org.hova.hover.sdk.http;
+package org.hova.hover.sdk.confirm;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -24,67 +14,47 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.hova.hover.sdk.http.Response;
+import org.hova.hover.sdk.pojo.ConfirmRegister;
+
+import com.google.gson.Gson;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
+public class ConfirmRegisterResource extends AsyncTask<String, String, Response> {
 
-/**
- * Creates a correct POST HTTP request using query string as API needs.
- *
- */
-public class ClientPOSTAsync extends AsyncTask<String, String, Response> {
-
-	// Endpoint
-	String endpoint = System.getProperty("http.endpoint");
-
-	// API Version
-	String api_version = System.getProperty("http.api.version");
-
+	
+	private static String URI = "/activateaccount";
+	private static String CTYPE= "application/json;";
+	
 	// HTTP parameters
 	String timeout = System.getProperty("http.connection.timeout");
 	String readtimeout = System.getProperty("http.connection.readtimeout");
 
 	// HTTP custom headers
 	String Ckey=System.getProperty("Ckey");
-	
+		
 	// Response object
 	Response resp;
 
 	// Function to callBack
-	PostRequestExectue post_req_execute;
-	
-	
-	 /**
-	  * 
-	  * Interface to implements callback methods
-	  * 
-     */
-	public interface PostRequestExectue {
-		void doPostExecute(Response result);
-	}
-	
-	
-	 /**
-     * Build a instance of this class and set the default values to execute
-     * request
-     *
-     * @param pr is an interface instance to implements callback methods
-     * 
-     */
-	public ClientPOSTAsync(PostRequestExectue pr) {
-		post_req_execute=pr;
-	}
-	
+	ResourceConfirmRegister resource_confirm_register;
+		
 	/**
-     * Execute the GET HTTP request
-     *
-     * @param Array String contains all poarameters to execute request
-     *
-     * @return the response instance containing code and body response
-     * @throws UnsupportedEncodingException
-     * @throws ClientProtocolException
-     * @throws IOException
-     */
+	 *
+	 * Interface to implements callback methods
+	 * 
+	*/
+	public interface ResourceConfirmRegister {
+		void doSendConfirm(Response result);
+	}
+	
+	
+	public ConfirmRegisterResource(ResourceConfirmRegister resource_confirm_register) {
+		this.resource_confirm_register = resource_confirm_register;
+	}
+
 	@Override
 	protected Response doInBackground(String... params) {
 		
@@ -92,9 +62,10 @@ public class ClientPOSTAsync extends AsyncTask<String, String, Response> {
 			//params [0] URI
 			//params [1] Body
 			//params [2] CTYPE
+			//params [3] SERVER
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(endpoint+"/"+api_version+params[0].toString());
+			HttpPost httpPost = new HttpPost(params[3]+params[0].toString());
 			
 			Log.d("SDK", "HOST "+httpPost.getURI());
 			
@@ -148,15 +119,16 @@ public class ClientPOSTAsync extends AsyncTask<String, String, Response> {
 	}
 
 	
-	/**
-     * Callback method to indicate end of API request (Async. task).
-     *
-     * @param result the response instance containing code and body response
-     * 
-     */
+	public void sendConfirmRegister(ConfirmRegister cr, String server){
+		Gson gson=new Gson();
+		String json=gson.toJson(cr);
+		this.execute(URI,json,CTYPE,server);
+	}
+	
+	
 	@Override
     public void onPostExecute(Response result) {
-		post_req_execute.doPostExecute(result);
+		resource_confirm_register.doSendConfirm(result);
     }
 	
 }

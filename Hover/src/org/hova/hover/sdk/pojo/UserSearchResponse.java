@@ -3,7 +3,7 @@ package org.hova.hover.sdk.pojo;
 
 public class UserSearchResponse {
 
-	private User[] users;
+	private Object[] users;
 	private int total_results;
 	private int pages;
 	
@@ -20,10 +20,10 @@ public class UserSearchResponse {
 	public void setPages(int pages) {
 		this.pages = pages;
 	}
-	public User[] getUsers() {
+	public Object[] getUsers() {
 		return users;
 	}
-	public void setUsers(User[] users) {
+	public void setUsers(Object[] users) {
 		this.users = users;
 	}
 	

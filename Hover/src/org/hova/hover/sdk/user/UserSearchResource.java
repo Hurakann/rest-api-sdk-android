@@ -1,6 +1,8 @@
 package org.hova.hover.sdk.user;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.util.Iterator;
 
 import org.hova.hover.sdk.http.ClientGETAsync;
@@ -30,12 +32,12 @@ public class UserSearchResource implements getRequestExectue {
 		search_resource=sr;
 	}
 	
-	public void search(UserSearch usr_search){
+	public void search(UserSearch usr_search) throws UnsupportedEncodingException{
 		ClientGETAsync req=new ClientGETAsync(this);
-		req.execute(URI,checkForNewsAttributes(usr_search), CTYPE);
+		req.execute(URI, checkForNewsAttributes(usr_search), CTYPE);
 	}
 	
-	protected String checkForNewsAttributes (UserSearch us){
+	protected String checkForNewsAttributes (UserSearch us) throws UnsupportedEncodingException{
 		
 		String queryString="";
 		try {
@@ -56,9 +58,9 @@ public class UserSearchResource implements getRequestExectue {
 	     	            	queryString=queryString+"&"+key+"="+value;
 	            }else{
 	            	if(queryString.equalsIgnoreCase(""))
-		            	queryString="?"+key+"="+value;
+		            	queryString="?"+key+"="+ URLEncoder.encode(value.toString(),"UTF-8");
 		            else
-		            	queryString=queryString+"&"+key+"="+value;
+		            	queryString=queryString+"&"+key+"="+ URLEncoder.encode(value.toString(),"UTF-8");
 	            }
 	        }
 		} catch (JSONException e) {

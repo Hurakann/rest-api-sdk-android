@@ -1,10 +1,20 @@
+/**----------------------------------------------------------------------
+*** Copyright: (c) 2013-2014 Hova Networks S.A.P.I. de C.V.
+*** All rights reserved.
+***
+*** Redistribution and use in any form, with or without modification,
+*** is strictly prohibited.
+***
+*** Created by : Eder Gomez Nocelo <eder.nocelo@hovanetworks.com>
+***---------------------------------------------------------------------
+**/
+
 package org.hova.hover.sdk.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -13,11 +23,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.hova.hover.sdk.http.Response;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
 
+/**
+ * Creates a correct GET HTTP request using query string as API needs.
+ *
+ */
 public class ClientGETAsync extends  AsyncTask<String, String, Response> {
 
 	// Endpoint
@@ -39,7 +52,13 @@ public class ClientGETAsync extends  AsyncTask<String, String, Response> {
 		
 	// Response object
 		Response resp;
+		
 	
+	/**
+	  * 
+	  * Interface to implements callback methods
+	  * 
+	  */
 	public interface getRequestExectue {
 		void doGetExecute(Response result);
 	}
@@ -111,6 +130,7 @@ public class ClientGETAsync extends  AsyncTask<String, String, Response> {
 		return resp;
 	}
 	
+	// CALL TO CALLBACK METHOD TO INDICATE END OF API REQUEST
 	@Override
     public void onPostExecute(Response result) {
        doRec_callback.doGetExecute(result);

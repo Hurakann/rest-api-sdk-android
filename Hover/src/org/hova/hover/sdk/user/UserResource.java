@@ -33,7 +33,7 @@ public class UserResource implements PostRequestExectue, getRequestExectue {
 	
 	public void createUser(User user) throws ClientProtocolException, URISyntaxException, IOException{
         ClientPOSTAsync req=new ClientPOSTAsync(this);
-        req.execute(URI,checkForNewsAttributes(user),"application/json;");
+        req.execute(URI,checkForNewsAttributes(user),CTYPE);
 	}
 	
 	public void getUser(String branchid, String userid, String phase) throws MalformedURLException, IOException{

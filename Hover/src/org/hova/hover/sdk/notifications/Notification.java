@@ -8,6 +8,8 @@ public class Notification {
 	private String branch_id;
 	private String notification_id;
 	private Boolean read;
+	private String time;
+	private String date;
 	
 	
 	public String getTitle() {
@@ -46,7 +48,17 @@ public class Notification {
 	public void setRead(Boolean read) {
 		this.read = read;
 	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
 
-	
-	
 }
