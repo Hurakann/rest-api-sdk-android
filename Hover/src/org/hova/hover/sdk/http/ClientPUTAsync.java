@@ -127,7 +127,7 @@ public class ClientPUTAsync extends AsyncTask<String, String, Response> {
 		}
 		
 		
-		return null;
+		return resp;
 	}
 
 	

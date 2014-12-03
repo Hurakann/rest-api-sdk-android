@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-
 import org.apache.http.client.ClientProtocolException;
 import org.hova.hover.sdk.http.ClientGETAsync;
 import org.hova.hover.sdk.http.ClientGETAsync.getRequestExectue;
@@ -15,7 +14,6 @@ import org.hova.hover.sdk.http.ClientPUTAsync;
 import org.hova.hover.sdk.http.ClientPUTAsync.PutRequestExectue;
 import org.hova.hover.sdk.http.Response;
 import org.hova.hover.sdk.pojo.User;
-
 import com.google.gson.Gson;
 
 
@@ -61,7 +59,7 @@ public class UserResource implements PostRequestExectue, getRequestExectue, PutR
 			for(Field field : User.class.getDeclaredFields())
 				if(att.equalsIgnoreCase(field.getName()))
 		    		   attributes.remove(att);
-		
+	
 		Gson gs=new Gson();
 		String json=gs.toJson(user);
 		
