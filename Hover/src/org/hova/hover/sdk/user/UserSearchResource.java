@@ -1,19 +1,14 @@
 package org.hova.hover.sdk.user;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.Iterator;
-
 import org.hova.hover.sdk.http.ClientGETAsync;
 import org.hova.hover.sdk.http.ClientGETAsync.getRequestExectue;
 import org.hova.hover.sdk.http.Response;
 import org.hova.hover.sdk.pojo.UserSearch;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
-
 import com.google.gson.Gson;
 
 

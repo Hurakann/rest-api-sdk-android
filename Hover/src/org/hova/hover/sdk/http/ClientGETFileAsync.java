@@ -1,8 +1,7 @@
 package org.hova.hover.sdk.http;
-import java.io.IOException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -56,6 +55,7 @@ public class ClientGETFileAsync extends AsyncTask<String, String, ResponseFile> 
 	
 	@Override
 	protected ResponseFile doInBackground(String... urls) {
+		
 		try {
 			uri = new URI(endpoint+"/"+api_version+urls[0]+urls[1]);
 		} catch (URISyntaxException e) {
@@ -95,6 +95,7 @@ public class ClientGETFileAsync extends AsyncTask<String, String, ResponseFile> 
 				responseFile.setFile(new byte[0]);
 				//throw new IOException("Download failed, HTTP response code " + statusCode + " - " + statusLine.getReasonPhrase());
 			}
+			
 			return responseFile;
 		} catch (Exception e) {
 			e.printStackTrace();

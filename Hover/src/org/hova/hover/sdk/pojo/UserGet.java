@@ -27,7 +27,7 @@ public class UserGet {
 	private String live_zip_code;
 	private String languaje;
 	private Boolean fmd;
-	
+	private String  email;
 	
 	
 	public User getUser() {
@@ -167,5 +167,11 @@ public class UserGet {
 	}
 	public void setFmd(Boolean fmd) {
 		this.fmd = fmd;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

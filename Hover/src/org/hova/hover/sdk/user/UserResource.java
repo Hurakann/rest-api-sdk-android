@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+
 import org.apache.http.client.ClientProtocolException;
 import org.hova.hover.sdk.http.ClientGETAsync;
 import org.hova.hover.sdk.http.ClientGETAsync.getRequestExectue;
@@ -13,7 +14,9 @@ import org.hova.hover.sdk.http.ClientPOSTAsync.PostRequestExectue;
 import org.hova.hover.sdk.http.ClientPUTAsync;
 import org.hova.hover.sdk.http.ClientPUTAsync.PutRequestExectue;
 import org.hova.hover.sdk.http.Response;
+import org.hova.hover.sdk.pojo.Action;
 import org.hova.hover.sdk.pojo.User;
+
 import com.google.gson.Gson;
 
 
@@ -22,18 +25,28 @@ public class UserResource implements PostRequestExectue, getRequestExectue, PutR
 	UserResourceMethods user_resource_methods;
 	private static String URI = "/user";
 	private static String CTYPE= "application/json;";
+	private static String type;
 	
 	public interface UserResourceMethods{
 		void onCreateUser(Response result);
 		void onGetUser(Response result);
 		void onUpdateUser(Response result);
+		void onActionUser(Response result);
 	}
 	
 	public UserResource(UserResourceMethods urm) {
 		user_resource_methods=urm;
 	}
 	
+	public void actionUser(Action action) throws ClientProtocolException, URISyntaxException, IOException{
+        ClientPOSTAsync req=new ClientPOSTAsync(this);
+        Gson gs=new Gson();
+        type="action";
+        req.execute("/user/action",gs.toJson(action),CTYPE);
+	}
+	
 	public void createUser(User user) throws ClientProtocolException, URISyntaxException, IOException{
+		type="create";
         ClientPOSTAsync req=new ClientPOSTAsync(this);
         req.execute(URI,checkForNewsAttributes(user),CTYPE);
 	}
@@ -72,7 +85,10 @@ public class UserResource implements PostRequestExectue, getRequestExectue, PutR
 	
 	@Override
 	public void doPostExecute(Response result) {
-		user_resource_methods.onCreateUser(result);
+		if(type.equalsIgnoreCase("action"))
+			user_resource_methods.onActionUser(result);
+		else
+			user_resource_methods.onCreateUser(result);
 	}
 
 	@Override

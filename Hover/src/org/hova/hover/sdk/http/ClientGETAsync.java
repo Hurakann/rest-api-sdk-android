@@ -114,7 +114,10 @@ public class ClientGETAsync extends  AsyncTask<String, String, Response> {
 			// END CONNECTION
 			resp.setBody(sb.toString());
 			
+			br.close();
 			is.close();
+			
+			//httpResponse.getEntity().getContent().close();
 			httpClient.getConnectionManager().shutdown();
 			
 		} catch (ClientProtocolException e) {

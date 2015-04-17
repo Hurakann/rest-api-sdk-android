@@ -92,9 +92,15 @@ public class ClientPOSTAsync extends AsyncTask<String, String, Response> {
 			//params [0] URI
 			//params [1] Body
 			//params [2] CTYPE
+			//params [3] HOST
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(endpoint+"/"+api_version+params[0].toString());
+			HttpPost httpPost; 
+			
+			if(params.length<=3)
+				httpPost= new HttpPost(endpoint+"/"+api_version+params[0].toString());
+			else
+				httpPost= new HttpPost(params[3]+params[0].toString());
 			
 			Log.d("SDK", "HOST "+httpPost.getURI());
 			

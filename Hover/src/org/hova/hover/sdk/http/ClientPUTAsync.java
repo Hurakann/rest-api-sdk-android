@@ -75,8 +75,13 @@ public class ClientPUTAsync extends AsyncTask<String, String, Response> {
 		try {
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPut httpPut = new HttpPut(endpoint+"/"+api_version+params[0].toString());
+			HttpPut httpPut;
 		
+			if(params.length<=3)
+				httpPut = new HttpPut(endpoint+"/"+api_version+params[0].toString());
+			else
+				httpPut = new HttpPut(params[3]+params[0].toString());
+			
 			Log.d("SDK", "HOST "+httpPut.getURI());
 		
 			StringEntity entity;

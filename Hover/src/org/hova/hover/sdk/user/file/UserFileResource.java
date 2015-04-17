@@ -3,7 +3,6 @@ package org.hova.hover.sdk.user.file;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
-
 import org.hova.hover.sdk.http.ClientGETFileAsync;
 import org.hova.hover.sdk.http.ClientGETFileAsync.getRequestFileExecute;
 import org.hova.hover.sdk.http.ResponseFile;
@@ -13,7 +12,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
-public class UserFileResource implements getRequestFileExecute {
+public class UserFileResource implements getRequestFileExecute{
 
 	private String URI = "/user/file";
 	FileResource file_resource;
@@ -35,6 +34,7 @@ public class UserFileResource implements getRequestFileExecute {
 			e.printStackTrace();
 		}
 	}
+	
 
 	protected String checkForNewsAttributes(UserFile uf)
 			throws UnsupportedEncodingException {
