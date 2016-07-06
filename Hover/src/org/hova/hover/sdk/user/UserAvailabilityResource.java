@@ -24,35 +24,40 @@ import org.hova.hover.sdk.http.Response;
  * 
  * @author CarlosAlvarezV
  */
-public class UserAvailabilityResource implements getRequestExectue{
+public class UserAvailabilityResource implements getRequestExectue {
 
-
-	protected static String URI="/user/availability";
-	protected static String CTYPE="application/json;";
+	protected static String URI = "/user/availability";
+	protected static String CTYPE = "application/json;";
+	private ClientGETAsync cGETAsync;
 
 	ResourceAvailability availability_resource;
-	
-	public interface ResourceAvailability{
-		void onCheckAvailanility(Response result);
+
+	public interface ResourceAvailability {
+		void onCheckAvailanility(Response response);
 	}
-	
+
 	public UserAvailabilityResource(ResourceAvailability ar) {
-		// TODO Auto-generated constructor stub
-		availability_resource=ar;
+		availability_resource = ar;
 	}
-	
-	public void checkAvailability(String identity) throws ClientProtocolException, URISyntaxException, IOException{
+
+	public void checkAvailability(String identity) throws ClientProtocolException, URISyntaxException, IOException {
 		// Build a query string data for [GET]
-		String query="?identity="+identity;
-		
-		ClientGETAsync req=new ClientGETAsync(this);
-		req.execute(URI,query,CTYPE);
+		String query = "?identity=" + identity;
+
+		cGETAsync = new ClientGETAsync(this);
+		cGETAsync.execute(URI, query, CTYPE);
 	}
-	
-	
+
 	@Override
-	public void doGetExecute(Response result) {
-		availability_resource.onCheckAvailanility(result);
+	public void doGetExecute(Response response) {
+		availability_resource.onCheckAvailanility(response);
 	}
-		
+
+	public void cancelRequest() {
+		if (cGETAsync != null) {
+			cGETAsync.cancelRequest();
+			cGETAsync.cancel(true);
+		} else {
+		}
+	}
 }

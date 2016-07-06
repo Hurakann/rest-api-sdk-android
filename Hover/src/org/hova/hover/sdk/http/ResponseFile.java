@@ -5,7 +5,7 @@ public class ResponseFile {
 	private int httpcode;
 	// Response file in bytes
 	private byte[] file;
-	
+
 	/**
 	 * Get the HTTP Status Code of the requested resource
 	 * 

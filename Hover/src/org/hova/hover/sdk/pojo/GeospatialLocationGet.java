@@ -1,9 +1,17 @@
 package org.hova.hover.sdk.pojo;
 
-public class Helper {
+public class GeospatialLocationGet {
+	double km;
+	String id;
+	String name;
 
-	private String id;
-	private String name;
+	public double getKm() {
+		return km;
+	}
+
+	public void setKm(double km) {
+		this.km = km;
+	}
 
 	public String getId() {
 		return id;
@@ -20,5 +28,4 @@ public class Helper {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }

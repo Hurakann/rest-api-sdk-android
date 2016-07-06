@@ -31,121 +31,135 @@ public class ClientPUTAsync extends AsyncTask<String, String, Response> {
 	String readtimeout = System.getProperty("http.connection.readtimeout");
 
 	// HTTP custom headers
-	String Ckey=System.getProperty("Ckey");
-		
+	String Ckey = System.getProperty("Ckey");
+
 	// Response object
-	Response resp;
-		
+	Response response;
+
 	// Function to callBack
 	PutRequestExectue put_req_execute;
-	
-	 /**
-	  * 
-	  * Interface to implements callback methods
-	  * 
-    */
+
+	// Http object
+	HttpPut httpPut;
+
+	// Http client object
+	DefaultHttpClient httpClient;
+
+	/**
+	 * 
+	 * Interface to implements callback methods
+	 * 
+	 */
 	public interface PutRequestExectue {
-		void doPutExecute(Response result);
+		/**
+		 * Callback method to indicate end of API request (Async. task).
+		 *
+		 * @param result
+		 *            the response instance containing code and body response
+		 * 
+		 */
+		void doPutExecute(Response response);
 	}
-	
-	
+
 	/**
-     * Build a instance of this class and set the default values to execute
-     * request
-     *
-     * @param pr is an interface instance to implements callback methods
-     * 
-     */
-	public ClientPUTAsync(PutRequestExectue putreq){
-		put_req_execute=putreq;
+	 * Build a instance of this class and set the default values to execute
+	 * request
+	 *
+	 * @param pr
+	 *            is an interface instance to implements callback methods
+	 * 
+	 */
+	public ClientPUTAsync(PutRequestExectue putreq) {
+		put_req_execute = putreq;
 	}
-	
+
 	/**
-     * Execute the PUT HTTP request
-     *
-     * @param Array String contains all poarameters to execute request
-     *
-     * @return the response instance containing code and body response
-     * @throws UnsupportedEncodingException
-     * @throws ClientProtocolException
-     * @throws IOException
-     */
+	 * Execute the PUT HTTP request
+	 *
+	 * @param Array
+	 *            String contains all poarameters to execute request
+	 *
+	 * @return the response instance containing code and body response
+	 * @throws UnsupportedEncodingException
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	@Override
 	protected Response doInBackground(String... params) {
 		try {
-			
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPut httpPut;
-		
-			if(params.length<=3)
-				httpPut = new HttpPut(endpoint+"/"+api_version+params[0].toString());
+
+			httpClient = new DefaultHttpClient();
+
+			if (params.length <= 3)
+				httpPut = new HttpPut(endpoint + "/" + api_version + params[0].toString());
 			else
-				httpPut = new HttpPut(params[3]+params[0].toString());
-			
-			Log.d("SDK", "HOST "+httpPut.getURI());
-		
+				httpPut = new HttpPut(params[3] + params[0].toString());
+
+			Log.d("SDK", "HOST " + httpPut.getURI());
+
 			StringEntity entity;
-		
+
 			entity = new StringEntity(params[1], "UTF-8");
 			entity.setContentEncoding("UTF-8");
-			
+
+			Log.d("SDK", "BODY " + params[1]);
+
 			HttpParams httpParameters = httpClient.getParams();
 			HttpConnectionParams.setConnectionTimeout(httpParameters, Integer.parseInt(timeout));
 			HttpConnectionParams.setSoTimeout(httpParameters, Integer.parseInt(readtimeout));
-			
+
 			httpPut.setEntity(entity);
 			httpPut.setHeader("Accept", params[2]);
-			httpPut.setHeader("Content-type",params[2]+"charset=UTF-8");
-			httpPut.addHeader("Ckey",Ckey);
-			
-			
-			HttpResponse httpResponse = httpClient.execute(httpPut);
-			
-			resp=new Response();
-			resp.setHttpcode(httpResponse.getStatusLine().getStatusCode());
-			
-			HttpEntity httpEntity = httpResponse.getEntity();
-			InputStream is = httpEntity.getContent();
-			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			
-			while ((line = reader.readLine()) != null) 
-				sb.append(line + "\n");
-		
-			is.close();
-			String json = sb.toString();
-			
-			resp.setBody(json);
-			
-			
+			httpPut.setHeader("Content-type", params[2] + "charset=UTF-8");
+			httpPut.addHeader("Ckey", Ckey);
+
+			if (!httpPut.isAborted()) {
+				HttpResponse httpResponse = httpClient.execute(httpPut);
+
+				response = new Response();
+				response.setHttpcode(httpResponse.getStatusLine().getStatusCode());
+
+				HttpEntity httpEntity = httpResponse.getEntity();
+				InputStream iStream = httpEntity.getContent();
+
+				BufferedReader bReader = new BufferedReader(
+						new InputStreamReader(iStream, "UTF-8"), 8);
+				StringBuilder sBuilder = new StringBuilder();
+				String line = null;
+
+				while ((line = bReader.readLine()) != null)
+					sBuilder.append(line + "\n");
+
+				bReader.close();
+				iStream.close();
+
+				String json = sBuilder.toString();
+
+				response.setBody(json);
+			}
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		return resp;
+
+		return response;
 	}
 
 	
-	/**
-     * Callback method to indicate end of API request (Async. task).
-     *
-     * @param result the response instance containing code and body response
-     * 
-     */
 	@Override
-    public void onPostExecute(Response result) {
-		put_req_execute.doPutExecute(result);
-    }
-	
-	
+	public void onPostExecute(Response response) {
+		put_req_execute.doPutExecute(response);
+	}
+
+	public void cancelRequest() {
+		if (httpPut != null) {
+			httpPut.abort();
+		}
+	}
+
 }

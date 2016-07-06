@@ -15,12 +15,12 @@ import org.apache.http.util.EntityUtils;
 import android.os.AsyncTask;
 
 public class ClientGETFileAsync extends AsyncTask<String, String, ResponseFile> {
-	
+
 	URI uri;
-	DefaultHttpClient httpclient;
+	DefaultHttpClient httpClient;
 	HttpParams httpparams;
-	HttpGet httpget;
-	
+	HttpGet httpGet;
+
 	// Endpoint
 	String endpoint = System.getProperty("http.endpoint");
 
@@ -38,7 +38,7 @@ public class ClientGETFileAsync extends AsyncTask<String, String, ResponseFile> 
 	getRequestFileExecute requestCallback;
 
 	// Response object
-			ResponseFile responseFile;
+	ResponseFile responseFile;
 
 	/**
 	 * 
@@ -48,64 +48,69 @@ public class ClientGETFileAsync extends AsyncTask<String, String, ResponseFile> 
 	public interface getRequestFileExecute {
 		void doGetFileExecute(ResponseFile responseFile);
 	}
-	
-	public ClientGETFileAsync(getRequestFileExecute requestCallback) {		
+
+	public ClientGETFileAsync(getRequestFileExecute requestCallback) {
 		this.requestCallback = requestCallback;
 	}
-	
+
 	@Override
 	protected ResponseFile doInBackground(String... urls) {
-		
+
 		try {
-			uri = new URI(endpoint+"/"+api_version+urls[0]+urls[1]);
+			uri = new URI(endpoint + "/" + api_version + urls[0] + urls[1]);
 		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		httpclient = new DefaultHttpClient();
+		httpClient = new DefaultHttpClient();
 
-		httpparams = httpclient.getParams();
+		httpparams = httpClient.getParams();
 		HttpConnectionParams.setConnectionTimeout(httpparams, Integer.parseInt(timeout));
 		HttpConnectionParams.setSoTimeout(httpparams, Integer.parseInt(readtimeout));
-		httpget = new HttpGet(uri);
-		httpget.addHeader("Host", uri.getHost());
-		httpget.addHeader("Ckey", Ckey);
+		httpGet = new HttpGet(uri);
+		httpGet.addHeader("Host", uri.getHost());
+		httpGet.addHeader("Ckey", Ckey);
 		HttpResponse httpResponse;
 		try {
-			
-			// INIT RESPONSE OBJECT	
-			responseFile= new ResponseFile();
-						
-			httpResponse = httpclient.execute(httpget);
 
-			StatusLine statusLine = httpResponse.getStatusLine();
-			int statusCode = statusLine.getStatusCode();
-			
-			// SET RESPONSE OBJECT	
-			responseFile.setHttpCode(statusCode);
-						
-			if (statusCode == HttpStatus.SC_OK) {
-				HttpEntity entity = httpResponse.getEntity();
-				byte[] bytes = EntityUtils.toByteArray(entity);
-				//Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
-				//		bytes.length);
-				responseFile.setFile(bytes);
-				//return bytes;
-			} else {
-				responseFile.setFile(new byte[0]);
-				//throw new IOException("Download failed, HTTP response code " + statusCode + " - " + statusLine.getReasonPhrase());
+			// INIT RESPONSE OBJECT
+
+			if (!httpGet.isAborted()) {
+				httpResponse = httpClient.execute(httpGet);
+				StatusLine statusLine = httpResponse.getStatusLine();
+				int statusCode = statusLine.getStatusCode();
+
+				responseFile = new ResponseFile();
+				// SET RESPONSE OBJECT
+				responseFile.setHttpCode(statusCode);
+
+				if (statusCode == HttpStatus.SC_OK) {
+					HttpEntity entity = httpResponse.getEntity();
+					byte[] bytes = EntityUtils.toByteArray(entity);
+					responseFile.setFile(bytes);
+				} else {
+					responseFile.setFile(new byte[0]);
+				}
 			}
-			
+
 			return responseFile;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return responseFile;
 	}
-	
+
 	@Override
-    public void onPostExecute(ResponseFile responseFile) {
+	public void onPostExecute(ResponseFile responseFile) {
 		requestCallback.doGetFileExecute(responseFile);
-    }
-	
+	}
+
+	public void cancelRequest() {
+		if (httpGet != null) {
+			httpGet.abort();
+		}
+	}
+
 }

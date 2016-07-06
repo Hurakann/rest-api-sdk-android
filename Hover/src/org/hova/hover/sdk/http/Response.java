@@ -78,8 +78,8 @@ public class Response {
 	 */
 	public Object getBodyT(Class<?> clazz) {
 		Gson gson = new Gson();
-        bodyT = gson.fromJson(this.getBody(), clazz);       
-        return clazz.cast(bodyT);
+		bodyT = gson.fromJson(this.getBody(), clazz);
+		return clazz.cast(bodyT);
 	}
 
 	/**

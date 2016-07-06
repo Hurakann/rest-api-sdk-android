@@ -81,8 +81,7 @@ public class ClientPUT {
 	 * @throws IllegalStateException
 	 * @throws URISyntaxException
 	 */
-	public Response request() throws IllegalStateException, IOException,
-			URISyntaxException {
+	public Response request() throws IllegalStateException, IOException, URISyntaxException {
 
 		URI uri_ = new URI(Endpoint + "/" + API_Version + this.uri);
 
@@ -90,18 +89,15 @@ public class ClientPUT {
 
 		HttpParams httpparams = httpclient.getParams();
 		// Set timeout
-		HttpConnectionParams.setConnectionTimeout(httpparams,
-				Integer.valueOf(timeout));
-		HttpConnectionParams.setSoTimeout(httpparams,
-				Integer.valueOf(readtimeout));
+		HttpConnectionParams.setConnectionTimeout(httpparams, Integer.valueOf(timeout));
+		HttpConnectionParams.setSoTimeout(httpparams, Integer.valueOf(readtimeout));
 
 		HttpPut httpput = new HttpPut(uri_);
 		httpput.setHeader("Accept", ctype);
 		httpput.addHeader("Host", uri_.getHost());
 
 		// Log [INFO] Prepare http request
-		Logger.getLogger("rest-api-sdk-java").log(Level.INFO, Logs.LOG_REQUEST,
-				new String[] { this.uri, this.body, this.ctype });
+		Logger.getLogger("rest-api-sdk-java").log(Level.INFO, Logs.LOG_REQUEST, new String[] { this.uri, this.body, this.ctype });
 		httpput.setEntity(new StringEntity(body, "UTF-8"));
 
 		HttpResponse httpresponse = httpclient.execute(httpput);
@@ -130,11 +126,7 @@ public class ClientPUT {
 		is.close();
 
 		// Loggin our response!
-		Logger.getLogger("rest-api-sdk-java").log(
-				Level.INFO,
-				Logs.LOG_RESPONSE,
-				new String[] { String.valueOf(response.getHttpcode()),
-						response.getBody(), "[Class<?>T]" });
+		Logger.getLogger("rest-api-sdk-java").log(Level.INFO, Logs.LOG_RESPONSE, new String[] { String.valueOf(response.getHttpcode()), response.getBody(), "[Class<?>T]" });
 
 		httpclient.getConnectionManager().shutdown();
 

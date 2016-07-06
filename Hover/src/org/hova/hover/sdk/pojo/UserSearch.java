@@ -17,36 +17,51 @@ package org.hova.hover.sdk.pojo;
  * @author CarlosAlvarezV
  */
 public class UserSearch {
-	
+
 	private String branch_id;
+	private String thql;
+	private String pagination_id;
 	private int pagination;
 	private int page;
-	
-	
+
 	public String getBranch_id() {
-		return branch_id;
+		return this.branch_id;
 	}
+
 	public void setBranch_id(String branch_id) {
 		this.branch_id = branch_id;
 	}
-	
-	
-	
+
 	public int getPagination() {
-		return pagination;
+		return this.pagination;
 	}
+
 	public void setPagination(int pagination) {
 		this.pagination = pagination;
 	}
-	
-	
-	
+
 	public int getPage() {
-		return page;
+		return this.page;
 	}
+
 	public void setPage(int page) {
 		this.page = page;
 	}
 
-	
+	public String getThql() {
+		return this.thql;
+	}
+
+	public void setThql(String thql) {
+		this.thql = thql;
+	}
+
+	public String getPagination_id() {
+		return this.pagination_id;
+	}
+
+	public void setPagination_id(String pagination_id) {
+		this.pagination_id = pagination_id;
+	}
+
 }
