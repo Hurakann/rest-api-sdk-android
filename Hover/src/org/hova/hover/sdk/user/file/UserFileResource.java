@@ -12,29 +12,25 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
-public class UserFileResource implements getRequestFileExecute{
+public class UserFileResource implements getRequestFileExecute {
 
 	private String URI = "/user/file";
 	FileResource file_resource;
+	private ClientGETFileAsync cGETFileAsync;
 
 	public interface FileResource {
-		void onGetFile(ResponseFile result);
+		void onGetFile(ResponseFile responseFile);
 	}
 
 	public UserFileResource(FileResource fr) {
 		file_resource = fr;
 	}
 
-	public void getFile(UserFile usr_file) {
-		ClientGETFileAsync req = new ClientGETFileAsync(this);
-		try {
-			req.execute(URI, checkForNewsAttributes(usr_file));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void getFile(UserFile usr_file) throws UnsupportedEncodingException {
+		cGETFileAsync = new ClientGETFileAsync(this);
+		cGETFileAsync.execute(URI, checkForNewsAttributes(usr_file));
+
 	}
-	
 
 	protected String checkForNewsAttributes(UserFile uf)
 			throws UnsupportedEncodingException {
@@ -57,7 +53,7 @@ public class UserFileResource implements getRequestFileExecute{
 							queryString = queryString + "&" + key + "=" + value;
 				} else {
 					if (queryString.equalsIgnoreCase(""))
-						queryString = "?" + key + "="+ URLEncoder.encode(value.toString(), "UTF-8");
+						queryString = "?" + key + "=" + URLEncoder.encode(value.toString(), "UTF-8");
 					else
 						queryString = queryString + "&" + key + "=" + URLEncoder.encode(value.toString(), "UTF-8");
 				}
@@ -73,6 +69,14 @@ public class UserFileResource implements getRequestFileExecute{
 	public void doGetFileExecute(ResponseFile responseFile) {
 		file_resource.onGetFile(responseFile);
 
+	}
+
+	public void cancelRequest() {
+		if (cGETFileAsync != null) {
+			cGETFileAsync.cancelRequest();
+			cGETFileAsync.cancel(true);
+		} else {
+		}
 	}
 
 }
