@@ -39,9 +39,9 @@ public class UserFileResource implements getRequestFileExecute {
 		try {
 			Gson gson = new Gson();
 			JSONObject jsonObj = new JSONObject(gson.toJson(uf));
-			Iterator<String> keysItr = jsonObj.keys();
+			Iterator<?> keysItr = jsonObj.keys();
 			while (keysItr.hasNext()) {
-				String key = keysItr.next();
+				String key = (String) keysItr.next();
 				Object value = jsonObj.get(key);
 
 				if (key.equalsIgnoreCase("page") || key.equalsIgnoreCase("pagination")) {

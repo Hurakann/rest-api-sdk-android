@@ -44,10 +44,10 @@ public class GeospatialSearchResource implements getRequestExectue {
 		try {
 			Gson gson=new Gson();
 			JSONObject jsonObj = new JSONObject(gson.toJson(geospatial_location_search));
-			Iterator<String> keysItr = jsonObj.keys();
+			Iterator<?> keysItr = jsonObj.keys();
 	        while(keysItr.hasNext())
 	        {
-	        	String key = keysItr.next();
+	        	String key = (String) keysItr.next();
 	            Object value = jsonObj.get(key);
 	          
 	            if(key.equalsIgnoreCase("page") || key.equalsIgnoreCase("pagination")){
